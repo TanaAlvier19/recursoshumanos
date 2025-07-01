@@ -11,7 +11,7 @@ const Navbar = () => {
       <Image src="/onono1.jpg" alt="" className=" mix-blend-lighten " width={340} height={240}/>
     </div>
     {/* ICONS AND USER */}
-    <div className='flex items-center gap-6 justify-end w-full' href="/login">
+    <div className='flex items-center gap-6 justify-end cursor-pointer w-full' href="/login">
      
       <div className='flex flex-col'>
         <span className="text-xs leading-3 font-medium"></span>
