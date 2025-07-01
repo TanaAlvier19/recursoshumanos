@@ -11,13 +11,13 @@ const Navbar = () => {
       <Image src="/onono1.jpg" alt="" className=" mix-blend-lighten " width={340} height={240}/>
     </div>
     {/* ICONS AND USER */}
-    <div className='flex items-center gap-6 justify-end w-full'>
+    <div className='flex items-center gap-6 justify-end w-full' href="/login">
      
       <div className='flex flex-col'>
         <span className="text-xs leading-3 font-medium"></span>
         <span className="text-[10px] text-gray-500 text-right">Admin</span>
       </div>
-      <User size={40} href="/login" color='#fff' />
+      <User size={40}  color='#fff' />
     </div>
   </div>
 
