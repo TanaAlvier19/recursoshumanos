@@ -23,7 +23,13 @@ const AdminDashboard = () => {
   const [nomeDepartamento, setNomeDepartamento] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<DataItem[]>([]);
-
+  const colorClasses = {
+  blue: 'border-blue-500 text-blue-600',
+  green: 'border-green-500 text-green-600',
+  yellow: 'border-yellow-500 text-yellow-600',
+  red: 'border-red-500 text-red-600',
+  default: 'border-gray-300 text-gray-600',
+};
   useEffect(() => {
     const fetchData = async () => {
       try {
