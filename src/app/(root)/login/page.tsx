@@ -9,10 +9,18 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [nif, setNif] = useState('')
   const [loading, setLoading] = useState(false);
+  const [escolhido,setescolhido]=useState('')
 
   const router = useRouter()
   const url = 'https://avd-registrar-empresa.onrender.com/registrar_empresa/login'
-
+  if (escolhido=="admin"){
+    router.push("/login")
+  }
+  else if (escolhido=="funcionario"){
+    router.push(
+      "/logincomsenha"
+    )
+  }
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage("");
@@ -106,7 +114,15 @@ const Login = () => {
         </h2>
         <form onSubmit={handleSubmit}>
             {/* Nif */}
-            <div className="mb-4">
+            <div className="mb-4 ">
+              <select
+          value={escolhido}
+          onChange={(e)=> setescolhido(e.target.value)}
+          className="border p-2 rounded-md justify-center items-center"
+          >
+            <option value="admin">Entrar como Admin</option>
+            <option value="funcionario">Entrar como Funcionário</option>
+          </select>
             <label htmlFor="nif" className="block text-gray-700">
               NIF
             </label>
