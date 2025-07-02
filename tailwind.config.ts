@@ -7,6 +7,11 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+    safelist: [
+    'w-[20%]',
+    'w-[14%]',
+    'w-[8%]',
+  ],
   theme: {
   	extend: {
   		backgroundImage: {
