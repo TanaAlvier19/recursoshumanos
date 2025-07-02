@@ -28,6 +28,13 @@ const FuncionarioDashboard = () => {
   const [pendente, setpendente] = useState(0);
   const [totalPresencas, setTotalPresencas] = useState(0);
   const [departamentos, setDepartamentos] = useState([]);
+  const colorClasses = {
+  blue: 'border-blue-500 text-blue-600',
+  green: 'border-green-500 text-green-600',
+  yellow: 'border-yellow-500 text-yellow-600',
+  red: 'border-red-500 text-red-600',
+  default: 'border-gray-300 text-gray-600',
+};
    const router = useRouter()
  useEffect(() => {
      fetch('https://backend-django-2-7qpl.onrender.com/api/dispensa/my/', {
