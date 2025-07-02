@@ -27,7 +27,8 @@ const handleClickOutside = (event: { target: any; }) => {
   return (
     <div className="h-screen flex">
 
-      <div className="flex-col w-[20%] md:w-[8%] bg-sky-700 hidden md:flex lg:w-[14%] xl:w-[40%] ">
+      <div className="flex-col hidden md:flex bg-sky-700 
+  w-1/5 md:w-2/12 lg:w-2/12 xl:w-1/5 ">
         <Menu />
       </div>
         {abrirMenu && (
