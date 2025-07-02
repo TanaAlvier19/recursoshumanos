@@ -65,9 +65,9 @@ const doughnutData = {
   };
   return (
      <div className="min-h-screen bg-gray-50 p-6 space-y-8">
-      <h1 className="md:text-4xl font-bold text-gray-500">Painel do Funcionário</h1>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+      <h1 className="lg:text-2xl font-bold text-blue-500">Bem-Vindo, {userName}</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6
+">
         {[
           { label: 'Total de Dispensas', value: dispensa, color: 'blue' },
           { label: 'Aprovadas', value: aprovada, color: 'green' },
@@ -76,7 +76,7 @@ const doughnutData = {
         ].map((item, idx) => (
           <div
             key={idx}
-            className={`bg-white p-4 rounded-lg shadow-md border-l-4 border-${item.color}-500`}
+            className={`bg-white p-4 rounded-lg md:flex-col shadow-md border-l-4 border-${item.color}-500`}
           >
             <h2 className="text-gray-500">{item.label}</h2>
             <p className={`text-2xl font-bold text-${item.color}-600`}>{item.value}</p>
