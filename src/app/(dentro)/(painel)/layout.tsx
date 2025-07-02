@@ -28,7 +28,7 @@ export default function DashboardLayout({
    const [abrirMenu, setabrirMenu]=useState(false)
   return (
     <div className="h-screen flex">
-      <div className="flex-col w-[20%] md:w-[8%] bg-sky-700 hidden md:flex lg:w-[14%] xl:w-[10%] ">
+      <div className="flex-col w-[20%]  bg-sky-700 hidden md:flex w-1/5 md:w-2/12 lg:w-2/12 xl:w-1/5">
         <Menu1 />
       </div>
        {abrirMenu && (
