@@ -102,12 +102,6 @@ const AdminDashboard = () => {
     }
   }, [accessToken]);
 
-  useEffect(() => {
-    if (!userLoading && !accessToken) {
-      router.push("/logincomsenha");
-    }
-  }, [accessToken, userLoading, router]);
-
   return (
     <div className="min-h-screen bg-gray-50 p-6 space-y-8">
       <h1 className="lg:text-2xl font-bold text-blue-500">Painel Administrativo</h1>
