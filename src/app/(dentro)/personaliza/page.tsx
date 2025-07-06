@@ -208,7 +208,7 @@ fields.forEach(item => {
              Crie um novo departamento ou módulo de dados, definindo os campos que ele deve conter. 
       Ex: Nome, Data de admissão, Cargo, etc. O sistema já adiciona um campo ID automaticamente.
           </p>
-          <Link className='text-gray-500 mt-10 p-7 text-3xl ' href='/admin' >Ir direito para o painel</Link>
+          <Link className='text-blue-500 mt-10 p-7 text-3xl ' href='/admin' >Ir direito para o painel</Link>
         </div>
 
         <div className="bg-white shadow rounded-lg p-6">
@@ -279,7 +279,7 @@ fields.forEach(item => {
                 </div>
 
                 <div className="mb-6">
-                  <div className="flex justify-between items-center mb-2">
+                  <div className="flex flex-col w-fit gap-2 mb-2">
                     <h2 className="text-sm font-medium text-gray-700">
                       Campos Personalizaveis
                     </h2>
