@@ -213,7 +213,7 @@ const reconhecerFace = async () => {
   console.log('imagem capturada:');
   try {
     
-    const resposta = await fetch('https://166e-102-218-85-158.ngrok-free.app/api/facial/', {
+    const resposta = await fetch('https://d620-102-214-36-139.ngrok-free.app/api/facial/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ image: imagem }),
