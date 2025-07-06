@@ -43,7 +43,7 @@ function formatDate(dateString: string) {
 }
 
 export default function DispensaFuncionario() {
-  const { accessToken, userLoading } = useContext(AuthContext);
+  const { accessToken, userLoading , userName} = useContext(AuthContext);
   const [dispensa, setdispensa] = useState<Leave[]>([]);
   const [motivo, setmotivo] = useState("");
   const [inicio, setinicio] = useState("");
@@ -68,13 +68,38 @@ export default function DispensaFuncionario() {
     };
   
   useEffect(() => {
-    fetch("https://backend-django-2-7qpl.onrender.com/api/dispensa/my/", {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    })
-      .then((r) => r.json())
-     .then((j) => setdispensa(Array.isArray(j.message) ? j.message : j))
-      .finally(() => setLoading(false));
-  }, [accessToken]);
+  async function fetchDispensas() {
+    try {
+      const res = await fetch("https://backend-django-2-7qpl.onrender.com/api/dispensa/my/", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+
+      if (!res.ok) {
+        throw new Error(`Erro ${res.status}: ${res.statusText}`);
+      }
+
+      const json = await res.json();
+
+      if (Array.isArray(json)) {
+        setdispensa(json);
+      } else if (Array.isArray(json.message)) {
+        setdispensa(json.message);
+      } else {
+        console.error("Formato inesperado:", json);
+        setdispensa([]);  
+      }
+
+    } catch (error) {
+      console.error("Erro ao buscar dispensas:", error);
+      setdispensa([]);  
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (accessToken) fetchDispensas();
+}, [accessToken, userName]);
+
   useEffect(() => {
     if (!accessToken && !userLoading) {
       router.push('/logincomsenha')
@@ -105,8 +130,8 @@ const DeletarDados = async (pk: number) => {
         'success'
       );
     }
-  } catch {
-
+  } catch(err) {
+    alert(err)
   }
 }
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -124,13 +149,15 @@ function calculateDays(start: string, end: string): number {
      e.preventDefault();
 
   if (!accessToken) return Swal.fire("Erro", "Faça login primeiro", "error");
-
+  const hoje = new Date()
   const inicioDate = new Date(inicio);
   const fimDate = new Date(fim);
   if (inicioDate > fimDate) {
     return Swal.fire("Erro", "A data de início não pode ser posterior à data de término", "error");
   }
-
+  if ((inicioDate || fimDate) < hoje) {
+    return Swal.fire("Erro", "Selecione uma data atual", "warning");
+  }
   let uploadcareFileUrl = null;
 
   if (documento) {
