@@ -40,12 +40,12 @@ const menuItems1 = [
       {
         icon: <Settings />,
         label: "Definições",
-        href: "/Definições",
+        href: "/personaliza",
       },
       {
         icon: <LogOut />,
         label: "Sair",
-        href: "/Sair",
+        href: "/logimcomsenha",
       },
     ],
   },
