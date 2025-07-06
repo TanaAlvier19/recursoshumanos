@@ -1,8 +1,8 @@
 'use client'
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Swal from "sweetalert2"
 import Link from 'next/link';
+import Swal from "sweetalert2"
 type FieldDefinition = {
   name: string;
   type: string;
@@ -13,7 +13,7 @@ type FieldDefinition = {
 
 export default function CreateTablePage() {
   const router = useRouter();
-  const [tableName, setTableName] = useState('');
+  const [tableName, setTableName] = useState('t');
   const [fields, setFields] = useState<FieldDefinition[]>([
     {
       name: 'id',
@@ -39,7 +39,6 @@ export default function CreateTablePage() {
     // 'DEFAULT CURRENT_TIMESTAMP', 'DEFAULT NULL'
   ];
 
-  let normalizedTableName = ''
 
   const handleFieldChange = (index: number, key: keyof FieldDefinition, value: string | number) => {
     if (fields[index].isSystemField) return;
@@ -55,8 +54,22 @@ export default function CreateTablePage() {
   };
 
   const addField = () => {
-    setFields([fields[0], ...fields.slice(1), { name: '', type: 'varchar' }]);
-  };
+  const defaultType: string = 'varchar'; // Tipo inicial padrão ao adicionar campo
+  const defaultLength =
+    defaultType === 'decimal' ? 10 :
+    (defaultType === 'varchar' || defaultType === 'char') ? 255 : undefined;
+
+  setFields([
+    fields[0],
+    ...fields.slice(1),
+    {
+      name: '',
+      type: defaultType,
+      length: defaultLength,
+    }
+  ]);
+};
+
 
   const removeField = (index: number) => {
     if (fields[index].isSystemField) return;
@@ -68,7 +81,6 @@ export default function CreateTablePage() {
 
   const validateFields = () => {
 
-      console.log(normalizedTableName)
 
     // if (!tableName.match(/^[a-zA-Z_][a-zA-Z0-9_]*$/)) {
     //   setError('Nome deve começar com letra/underscore e conter apenas letras, números e underscores');
@@ -127,19 +139,23 @@ if (customFields.length === 0) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  let normalizedTableName = ''
+    if (!tableName) {
+      setError('Nome da tabela é obrigatório');
+      return;
+    }
     if (!validateFields()) return;
 
     setIsSubmitting(true);
     setError(null);
 
 normalizedTableName = tableName
+      .toLowerCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^\w]/g, '_'); // Espaços viram _, símbolos são removidos
 
-console.log(normalizedTableName)
-
+console.log("✅ Nome final (normalizado e minúsculo):", normalizedTableName);
 fields.forEach(item => {
   item.name = item.name
     .normalize('NFD')
@@ -169,9 +185,7 @@ fields.forEach(item => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(`Erro ao criar Departamento: 
-          1. Garanta que está configurando um novo Departamento;
-          2. Garanta que o Nome do Departamento e dos campos sejam válidos. `);
+        throw new Error(data.error || 'Erro ao criar tabela');
       }
 
       setSuccess(true);
@@ -191,7 +205,8 @@ fields.forEach(item => {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-extrabold text-gray-900">Personalize sua Empresa</h1>
           <p className="mt-2 text-sm text-gray-600">
-            Defina a estrutura da sua Empresa. O campo ID é obrigatório e configurado automaticamente.
+             Crie um novo departamento ou módulo de dados, definindo os campos que ele deve conter. 
+      Ex: Nome, Data de admissão, Cargo, etc. O sistema já adiciona um campo ID automaticamente.
           </p>
           <Link className='text-gray-500 mt-10 p-7 text-3xl ' href='/admin' >Ir direito para o painel</Link>
         </div>
@@ -242,18 +257,22 @@ fields.forEach(item => {
                   <label htmlFor="tableName" className="block text-sm font-medium text-gray-700 mb-1">
                     Nome do Departamento *
                   </label>
-                  <input
-                    type="text"
-                    id="tableName"
-                    value={tableName}
-                    onChange={(e) => setTableName(e.target.value)}
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
-                    placeholder="ex: TI, recursos_humanos"
-                    required
-                    maxLength={64}
-                    aria-label="Nome da tabela a ser criada"
-                    title="Digite o nome da tabela"
-                  />
+     <input
+  type="text"
+  id="tableName"
+  value={tableName}
+  onChange={(e) => {
+    const val = e.target.value.toLowerCase();
+    console.log("Lowercased:", val);
+    setTableName(val);
+  }}
+  autoCapitalize="off"
+  autoComplete="new-password"
+  spellCheck={false}
+  className="block w-full lowercase rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+  style={{ textTransform: 'lowercase' }}
+/>
+
                   <p className="mt-1 text-xs text-gray-500">
                     Deve começar com letra ou underscore, conter apenas letras, números e underscores (max 64 chars)
                   </p>
@@ -262,7 +281,7 @@ fields.forEach(item => {
                 <div className="mb-6">
                   <div className="flex justify-between items-center mb-2">
                     <h2 className="text-sm font-medium text-gray-700">
-                      Campos da Tabela *
+                      Campos Personalizaveis
                     </h2>
                     <button
                       type="button"
@@ -275,11 +294,11 @@ fields.forEach(item => {
                     </button>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-4 ">
                     {fields.map((field, index) => (
-                      <div key={index} className="border border-gray-200 rounded-md p-4">
+                      <div key={index} className="border border-gray-200 rounded-md p-4 ">
                         {field.isSystemField ? (
-                          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-3">
+                          <div className=" grid-cols-1 md:grid-cols-4 gap-4 mb-3 hidden">
                             <div>
                               <label className="block text-xs font-medium text-gray-700 mb-1">
                                 Nome do Campo *
@@ -341,20 +360,19 @@ fields.forEach(item => {
                                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
                                 required
                                 maxLength={64}
-                                placeholder="nome_do_campo"
+                                placeholder="Ex:Nome"
                                 aria-label={`Nome do campo ${index}`}
                                 title={`Digite o nome para o campo ${index}`}
                               />
                             </div>
 
                             <div>
-                              <label className="block text-xs font-medium text-gray-700 mb-1">
-                                Tipo *
-                              </label>
+                              
                               <select
+                                
                                 value={field.type}
                                 onChange={(e) => handleFieldChange(index, 'type', e.target.value)}
-                                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border hidden"
                                 aria-label={`Tipo do campo ${field.name || index}`}
                                 title={`Selecione o tipo para o campo ${field.name || index}`}
                               >
@@ -367,14 +385,14 @@ fields.forEach(item => {
                             </div>
 
                             <div>
-                              <label className="block text-xs font-medium text-gray-700 mb-1">
+                              <label className=" text-xs font-medium text-gray-700 mb-1 hidden">
                                 Tamanho {['varchar', 'char', 'decimal'].includes(field.type) && '*'}
                               </label>
                               <input
                                 type="number"
                                 value={field.length || ''}
                                 onChange={(e) => handleFieldChange(index, 'length', e.target.value ? parseInt(e.target.value) : '')}
-                                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border hidden"
                                 min="1"
                                 max="65535"
                                 disabled={!['varchar', 'char', 'decimal'].includes(field.type)}
@@ -389,12 +407,11 @@ fields.forEach(item => {
 
                             <div>
                               <label className="block text-xs font-medium text-gray-700 mb-1">
-                                Restrições
                               </label>
                               <select
                                 value={field.constraints || ''}
                                 onChange={(e) => handleFieldChange(index, 'constraints', e.target.value)}
-                                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                className="hidden w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
                                 aria-label={`Restrições para o campo ${field.name || index}`}
                                 title={`Selecione restrições para o campo ${field.name || index}`}
                               >
