@@ -62,7 +62,7 @@ export default function FormModalAssiduidade() {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
-
+ 
   const openCamera = async () => {
   Swal.fire({ title: 'Abrindo câmera...', didOpen: () => Swal.showLoading() });
 
@@ -115,6 +115,14 @@ export default function FormModalAssiduidade() {
     setError(null);
   };
    const armazenarImagem = () => {
+     if (armazenar.length >= 3) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Limite de 3 fotos atingido',
+      text: 'Você só pode capturar até 3 fotos para o reconhecimento facial.',
+    });
+    return;
+  }
     const imageData = captureImage();
     if (imageData) {
       setArmazenar(prev => [...prev, imageData]);
@@ -144,7 +152,7 @@ const registerNewFace = async () => {
       const blob = await (await fetch(imageData)).blob();
       formData.append("image", blob, "face.jpg");
 
-      const response = await fetch('https://3b63-102-214-36-178.ngrok-free.app/api/register_face/', {
+      const response = await fetch('https://d620-102-214-36-139.ngrok-free.app/api/register_face/', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -155,6 +163,7 @@ const registerNewFace = async () => {
       const data = await response.json();
 
       if (!response.ok) {
+        setArmazenar([]);
         erroOcorrido = true;
         console.error("Erro ao cadastrar imagem:", data);
         Swal.fire({
@@ -175,11 +184,17 @@ const registerNewFace = async () => {
     }
 
   } catch (err) {
+    setArmazenar([]);
+
+    setIsCameraOpen(false)
+    setContando(false)
+    setIsRegisteringFace(false)
     console.error("Erro geral:", err);
     Swal.fire({ icon: 'error', title: 'Erro ao registrar rosto', text: String(err) });
   }
 };
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     return () => {
       if (streamRef.current) streamRef.current.getTracks().forEach(track => track.stop());
