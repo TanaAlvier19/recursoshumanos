@@ -283,6 +283,8 @@ export default function AdminLeavesPage() {
                 <TableHead>Funcionário</TableHead>
                 <TableHead>Motivo</TableHead>
                 <TableHead>Período</TableHead>
+                <TableHead>Inicio</TableHead>
+                <TableHead>Fim</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Justificativo</TableHead>
                 <TableHead>Ações</TableHead>
@@ -296,6 +298,16 @@ export default function AdminLeavesPage() {
                   <TableCell>
                     <span className="text-sm text-black-800">
                       {calculateDays(l.inicio, l.fim)} dias
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm text-black-800">
+                      {l.inicio}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm text-black-800">
+                      {l.fim}
                     </span>
                   </TableCell>
                   <TableCell>{l.status}</TableCell>
