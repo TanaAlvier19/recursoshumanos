@@ -35,21 +35,12 @@ const menuItems = [
         label: "Formações",
         href: "/list/get_courses",
       },
-      {
-        icon: <ChartBarBig />,
-        label: "Perfomance",
-        href: "/list/Perfomance",
-      },
+      
     ],
   },
   {
     title: "OUTROS",
     items: [
-      {
-        icon: <Info />,
-        label: "Suporte",
-        href: "/Suporte",
-      },
       {
         icon: <Settings/>,
         label: "Definições",
