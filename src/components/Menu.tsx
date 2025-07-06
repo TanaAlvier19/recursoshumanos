@@ -49,7 +49,7 @@ const menuItems = [
       {
         icon: <LogOut/>,
         label: "Sair",
-        href: "/logimcomsenha",
+        href: "/login",
       },
     ],
   },
