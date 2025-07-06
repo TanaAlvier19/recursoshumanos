@@ -104,11 +104,7 @@ export default function LoginComSenha() {
             placeholder="Digite sua senha"
           />
         </div>
-        <div className="text-right">
-          <a href="/esqueci-senha" className="text-blue-500 hover:underline">
-            Esqueci minha senha
-          </a>
-        </div>
+        
         {err && (
           <div className="text-red-500 text-sm">
             {err}
