@@ -3,6 +3,8 @@ import { useEffect, useState, useRef, useContext } from 'react';
 import Swal from 'sweetalert2';
 import { AuthContext } from '@/app/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
+
 interface Assiduidade {
   id: number;
   funcionario: number;
@@ -38,19 +40,23 @@ export default function FormModalAssiduidade() {
     router.push("/logincomsenha");
   }
 }, [accessToken, userLoading, router]);
-  useEffect(() => {
-    if (userId) {fetchAssiduidade();}
-  }, [userId]);
-  const fetchAssiduidade = async () => {
-    const res = await fetch(`https://backend-django-2-7qpl.onrender.com/api/assiduidade/?funcionario=${userId}`,{
-      headers:{
-        Authorization:`Bearer ${accessToken}`,
-      },}
-    );
+
+  const fetchAssiduidade = useCallback(async () => {
+    const res = await fetch(`https://backend-django-2-7qpl.onrender.com/api/assiduidade/?funcionario=${userId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     const data = await res.json();
-    console.log('teu ID', userId)
+    console.log('teu ID', userId);
     setAssiduidadeList(data);
-  };
+  }, [userId, accessToken]);
+
+  useEffect(() => {
+    if (userId) {
+      fetchAssiduidade();
+    }
+  }, [userId, fetchAssiduidade]);
  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -58,16 +64,24 @@ export default function FormModalAssiduidade() {
   };
 
   const openCamera = async () => {
-    setIsRegisteringFace(true);
-    setIsCameraOpen(true);
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
-      streamRef.current = stream;
-      if (videoRef.current) videoRef.current.srcObject = stream;
-    } catch (err) {
-      setError('Erro ao acessar a câmera: ' + (err as Error).message);
-    }
-  };
+  Swal.fire({ title: 'Abrindo câmera...', didOpen: () => Swal.showLoading() });
+
+  setIsRegisteringFace(true);
+  setIsCameraOpen(true);
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+    streamRef.current = stream;
+    if (videoRef.current) videoRef.current.srcObject = stream;
+
+    Swal.close(); 
+
+  } catch (err) {
+    setError('Erro ao acessar a câmera: ' + (err as Error).message);
+    Swal.fire("Erro", "Não foi possível acessar sua câmera", "error");
+  }
+};
+
  useEffect(() => {
   let intervalo: ReturnType<typeof setInterval>;
 
@@ -130,7 +144,7 @@ const registerNewFace = async () => {
       const blob = await (await fetch(imageData)).blob();
       formData.append("image", blob, "face.jpg");
 
-      const response = await fetch('https://166e-102-218-85-158.ngrok-free.app/api/register_face/', {
+      const response = await fetch('https://3b63-102-214-36-178.ngrok-free.app/api/register_face/', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -176,17 +190,38 @@ const registerNewFace = async () => {
     <div className="p-6 space-y-6">
       <h1 className="md:text-2xl font-bold">Minha Assiduidade de {userName}</h1>
 
-      <div className="flex space-x-2">
+      <div className="flex flex-col w-fit space-x-2">
         
         <button onClick={openCamera}  className="bg-purple-600 text-white px-4 py-2 rounded">
           Cadastrar Foto (Rosto)
         </button>
+        <button
+  onClick={() => {
+    Swal.fire({
+      title: "Como funciona o cadastro de rosto?",
+      html: `
+        <p>1. Abriremos sua câmera.</p>
+        <p>2. Você deve capturar fotos do seu rosto em boa iluminação.</p>
+        <p>3. Após capturar, clique em "Confirmar Fotos".</p>
+        <p>4. Suas fotos serão enviadas com segurança para o sistema.</p>
+        <p>5. As imagens tiradas permitirão você a fazer os registros de assiduidade.</p>
+      `,
+      icon: 'info',
+    });
+  }}
+  className="text-sm text-blue-600 underline"
+>
+   Como funciona?
+</button>
       </div>
 
       {isRegisteringFace && isCameraOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded w-96 space-y-4">
             <h2 className="text-xl font-semibold">Cadastrar Rosto de {userName}</h2>
+            <p className="text-sm text-blue-600">
+  Posicione seu rosto na câmera. Quando estiver pronto, clique em Capturar Foto.(No maximo 3 fotos )
+</p>
             <video ref={videoRef} autoPlay playsInline className="w-full h-auto" />
             <div className="space-y-2">
             <button onClick={armazenarImagem} className="w-full bg-blue-600 text-white py-2 rounded">
