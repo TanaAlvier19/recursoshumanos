@@ -30,21 +30,13 @@ const menuItems1 = [
         label: "Minhas Formações",
         href: "/menu/formacoes",
       },
-      {
-        icon: <ChartBarBig />,
-        label: "Perfomance",
-        href: "/list/Perfomance",
-      },
+      
     ],
   },
   {
     title: "OUTROS",
     items: [
-      {
-        icon: <Info />,
-        label: "Suporte",
-        href: "/Suporte",
-      },
+      
       {
         icon: <Settings />,
         label: "Definições",
