@@ -251,6 +251,31 @@ fields.forEach(item => {
                   </div>
                 </div>
               )}
+                <button
+  type="button"
+  onClick={() => {
+    Swal.fire({
+      title: "Como personalizar esta parte?",
+      html: `
+        <p><strong>1.</strong> Aqui você pode criar uma "ficha personalizada" para guardar dados importantes sobre sua empresa.</p>
+        <p><strong>2.</strong> Por exemplo, pode adicionar campos como:</p>
+        <ul style="text-align:left; padding-left:1em;">
+          <li>📌 Nome do funcionário</li>
+          <li>📅 Data de entrada</li>
+          <li>💼 Cargo</li>
+          <li>📍 Local de trabalho</li>
+        </ul>
+        <p><strong>3.</strong> Clique no botão azul "Adicionar Campo" para colocar mais informações.</p>
+        <p><strong>4.</strong> Quando terminar de adicionar, clique em "Criar Tabela" para guardar tudo.</p>
+      `,
+      icon: 'info',
+      confirmButtonText: 'Entendi',
+    });
+  }}
+  className="text-sm text-blue-600 underline mt-2"
+>
+  Como funciona?
+</button>
 
               <form onSubmit={handleSubmit}>
                 <div className="mb-6">
@@ -276,6 +301,7 @@ fields.forEach(item => {
                   <p className="mt-1 text-xs text-gray-500">
                     Deve começar com letra ou underscore, conter apenas letras, números e underscores (max 64 chars)
                   </p>
+                  
                 </div>
 
                 <div className="mb-6">
