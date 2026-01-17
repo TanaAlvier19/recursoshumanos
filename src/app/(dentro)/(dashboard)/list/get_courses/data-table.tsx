@@ -49,7 +49,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { Courses } from "./columns"
 
-import { APIs } from "@/api"
 import { Textarea } from "@material-tailwind/react"
 import { Plus } from "lucide-react"
 import {

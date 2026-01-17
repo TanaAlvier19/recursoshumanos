@@ -1,3 +1,4 @@
+/* Nesta page vamos deseevolvemos o painel público que os candidatos poderão aplicar para vagas dísponíveis */
 "use client"
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"

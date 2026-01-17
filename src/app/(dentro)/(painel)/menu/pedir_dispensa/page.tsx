@@ -47,10 +47,7 @@ function formatDate(dateString: string) {
     : d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" });
 }
 
-const ForwardRefFileUploader = forwardRef((props: { pubkey: string }, ref) => {
-    return <FileUploaderRegular {...props} ref={ref} />;
-});
-ForwardRefFileUploader.displayName = 'ForwardRefFileUploader';
+
 
 export default function DispensaFuncionario() {
     const userName = "Nome do Funcionário"; 
@@ -171,7 +168,7 @@ export default function DispensaFuncionario() {
             });
 
             if (result.isConfirmed) {
-                const res = await fetch(`http://localhost/deletar-dispensa/${pk}/`, {
+                const res = await fetch(`http://localhost:8000/deletar-dispensa/${pk}/`, {
                     method: "DELETE",
                 });
                 await res.json();
@@ -353,8 +350,7 @@ export default function DispensaFuncionario() {
                             <div className="space-y-2">
                                 <Label htmlFor="documento">Documento de Apoio (Opcional)</Label>
                                 <div className="flex items-center gap-3">
-                                    <ForwardRefFileUploader
-                                        ref={uploaderRef}
+                                    <FileUploaderRegular
                                         pubkey="41450941b70f42384f1f"
                                     />
                                 </div>

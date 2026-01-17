@@ -16,8 +16,8 @@ import { buscarDados } from '@/lib/api';
 import { HomeIcon, PlusCircle, Trash2, HelpCircle, ChevronDown } from "lucide-react";
 
 type FieldDefinition = {
-  nome: string;
-  tipo: string;
+  nome?: string;
+  tipo?: string;
   isSystemField?: boolean;
   obrigatorio?: boolean;
   opcoes?: string[];
@@ -34,6 +34,8 @@ export default function CriarDepartamento() {
   const [empresaId, setEmpresaId] = useState('');
   const [campos, setCampos] = useState<FieldDefinition[]>([
     {
+      nome: "",
+     tipo: "string",
       isSystemField: true
     },
   ]);
@@ -105,7 +107,7 @@ export default function CriarDepartamento() {
     }
 
     for (const campo of camposPersonalizados) {
-      if (!campo.nome.trim()) {
+      if (!campo.nome?.trim()) {
         setErro('Todos os campos devem ter um nome');
         return false;
       }
@@ -115,7 +117,6 @@ export default function CriarDepartamento() {
         return false;
       }
 
-      // Validação específica para campos do tipo select
       if (campo.tipo === 'select' && (!campo.opcoes || campo.opcoes.length === 0)) {
         setErro(`O campo "${campo.nome}" do tipo seleção precisa ter opções definidas`);
         return false;

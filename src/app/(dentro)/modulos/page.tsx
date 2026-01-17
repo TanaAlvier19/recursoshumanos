@@ -24,7 +24,7 @@ export default function Modulos() {
   ]
 const router=useRouter()
 const [modulos, setmodulos]=useState<string[]>([])
-const selecionada = (event) => {
+const selecionada = (event:React.ChangeEvent<HTMLInputElement>) => {
   const value = event.target.value
   const checked = event.target.checked
   if(checked){
